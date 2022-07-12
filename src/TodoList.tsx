@@ -10,20 +10,33 @@ export type TaskType = {
 type TodoListPropsType = {
     title: string
     tasks: Array<TaskType>
+    filter: FilterValuesType
+
+    addTask: (title: string) => void
     removeTask: (taskID: string) => void
     changeFilter: (filter: FilterValuesType) => void
-    addTask: (title: string) => void
+    changeTaskStatus: (taskID: string, isDone: boolean) => void
+
 }
 
 const TodoList = (props: TodoListPropsType) => {
-    let [title, setTitle] = useState('')
+    const [title, setTitle] = useState('')
+    const [error, setError] = useState<boolean>(false)
+
+    const errorMessageStyle = {color: 'hotpink', backgroundColor: 'black'}
 
     const tasksListItems = props.tasks.length
-        ? props.tasks.map(task => {
+         ? props.tasks.map(task => {
+
+             const changeTaskStatus = (e: ChangeEvent<HTMLInputElement>) => props.changeTaskStatus(task.id, e.currentTarget.checked)
+
             return (
-                <li>
-                    <input type="checkbox" checked={task.isDone}/>
-                    <span>{task.title}</span>
+                <li >
+                    <input
+                        onChange={changeTaskStatus}
+                        type="checkbox" checked={task.isDone}
+                    />
+                    <span className={task.isDone ? 'isDone' : ''}>{task.title}</span>
                     <button onClick={() => props.removeTask(task.id)}>x</button>
                 </li>
             )
@@ -31,7 +44,13 @@ const TodoList = (props: TodoListPropsType) => {
         : <span> This List is empty</span>
 
     const onClickAddTaskHandler = () => {
-        props.addTask(title)
+        const trimmedTitled = title.trim()
+        if(trimmedTitled) {
+            props.addTask(trimmedTitled)
+        }
+        else {
+            setError(true)
+        }
         setTitle('')
     }
 
@@ -42,6 +61,7 @@ const TodoList = (props: TodoListPropsType) => {
     }
 
     const onChangeAddTaskHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        error && setError(false)
         setTitle(e.currentTarget.value)
     }
 
@@ -57,17 +77,19 @@ const TodoList = (props: TodoListPropsType) => {
                     value={title}
                     onChange={onChangeAddTaskHandler}
                     onKeyDown={onKeyDownAddTaskHandler}
+                    className={error ? 'error' : ''}
                 />
                 <button onClick={onClickAddTaskHandler}>+</button>
+                {error && <div style={errorMessageStyle}>Title is required!</div>}
             </div>
             <ul>
                 {tasksListItems}
             </ul>
 
             <div>
-                <button onClick={getChangeFilterHandler('all')}>All</button>
-                <button onClick={getChangeFilterHandler('active')}>Active</button>
-                <button onClick={getChangeFilterHandler('completed')}>Completed</button>
+                <button className={ props.filter === 'all' ? 'active' : ''} onClick={getChangeFilterHandler('all')}>All</button>
+                <button className={ props.filter === 'active' ? 'active' : ''} onClick={getChangeFilterHandler('active')}>Active</button>
+                <button className={ props.filter === 'all' ? 'completed' : ''} onClick={getChangeFilterHandler('completed')}>Completed</button>
             </div>
         </div>
 
