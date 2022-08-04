@@ -1,7 +1,10 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import React, {ChangeEvent} from 'react';
 import {FilterValuesType} from './App';
 import {AddItemForm} from './components/AddItemForm';
 import {EditableSpan} from './components/EditableSpan';
+import {Button, ButtonGroup, Checkbox, IconButton, List, ListItem} from '@mui/material';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+
 
 type TaskType = {
     id: string
@@ -48,10 +51,12 @@ export function Todolist(props: PropsType) {
     return <div>
         <h3>
             <EditableSpan title={props.title} callBack={changeTodolistTitle}/>
-            <button onClick={removeTodolistHandler}>x</button>
+            <IconButton aria-label="delete" onClick={removeTodolistHandler}>
+                <DeleteOutlinedIcon/>
+            </IconButton>
         </h3>
         <AddItemForm callBack={addTaskHandler}/>
-        <ul>
+        <List>
             {
                 props.tasks.map(t => {
                     const onClickHandler = () => {
@@ -64,31 +69,47 @@ export function Todolist(props: PropsType) {
                         props.editTask(props.todolistId, t.id, title)
                     }
 
-                    return <li key={t.id} className={t.isDone ? "is-done" : ""}>
-                        <input type="checkbox"
-                               onChange={onChangeHandler}
-                               checked={t.isDone}
-                        />
-
-                        <EditableSpan
-                            title={t.title}
-                            callBack={editTaskHandler}
-                        />
-                        <button onClick={onClickHandler}>x</button>
-                    </li>
+                    return (
+                        <ListItem key={t.id}
+                                  className={t.isDone ? "is-done" : ""}
+                                  dense
+                                  divider
+                        >
+                            <Checkbox
+                                size={'small'}
+                                onChange={onChangeHandler}
+                                checked={t.isDone}
+                            />
+                            <EditableSpan
+                                title={t.title}
+                                callBack={editTaskHandler}
+                            />
+                            <IconButton aria-label="delete" onClick={onClickHandler}>
+                                <DeleteOutlinedIcon
+                                    fontSize={'small'}
+                                />
+                            </IconButton>
+                        </ListItem>
+                    )
                 })
             }
-        </ul>
-        <div>
-            <button className={props.filter === 'all' ? "active-filter" : ""}
-                    onClick={onAllClickHandler}>All
-            </button>
-            <button className={props.filter === 'active' ? "active-filter" : ""}
-                    onClick={onActiveClickHandler}>Active
-            </button>
-            <button className={props.filter === 'completed' ? "active-filter" : ""}
-                    onClick={onCompletedClickHandler}>Completed
-            </button>
-        </div>
+        </List>
+
+        <ButtonGroup variant="contained" size={'small'} aria-label="outlined primary button group">
+            <Button
+                color={props.filter === 'all' ? 'secondary' : 'primary'}
+                onClick={onAllClickHandler}>All
+            </Button>
+            <Button
+                color={props.filter === 'active' ? 'secondary' : 'primary'}
+                onClick={onActiveClickHandler}>Active
+            </Button>
+            <Button
+                color={props.filter === 'completed' ? 'secondary' : 'primary'}
+                onClick={onCompletedClickHandler}>Completed
+            </Button>
+        </ButtonGroup>
+
+
     </div>
 }

@@ -1,4 +1,6 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
+import {Button, IconButton, TextField} from '@mui/material';
 
 
 type PropsType = {
@@ -15,6 +17,16 @@ export const AddItemForm = (props: PropsType) => {
         setTitle(e.currentTarget.value)
     }
 
+
+    const addTask = () => {
+        let newTitle = title.trim()
+        if (newTitle !== "") {
+            callBack(newTitle);
+            setTitle("");
+        } else {
+            setError("Title is required");
+        }
+    }
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         setError(null);
         if (e.charCode === 13) {
@@ -22,25 +34,24 @@ export const AddItemForm = (props: PropsType) => {
         }
     }
 
-    const addTask = () => {
-        let newTitle = title.trim()
-        if (newTitle !== "") {
-            callBack( newTitle);
-            setTitle("");
-        } else {
-            setError("Title is required");
-        }
-    }
-
     return (
         <div>
-            <input value={title}
-                   onChange={onChangeHandler}
-                   onKeyPress={onKeyPressHandler}
-                   className={error ? "error" : ""}
+            <TextField
+                variant={'outlined'}
+                label={"Title"}
+                // color={error ? 'error' : "primary"}
+                size={'small'}
+                rows={'minRows'}
+                value={title}
+                onChange={onChangeHandler}
+                onKeyPress={onKeyPressHandler}
+                helperText={error && 'Title is required'}
+                error={!!error}
             />
-            <button onClick={addTask}>+</button>
-            {error && <div className="error-message">{error}</div>}
+
+            <IconButton onClick={addTask}>
+                <AddCircleOutlineOutlinedIcon/>
+            </IconButton>
         </div>
     );
 };
