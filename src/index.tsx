@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import {createTheme, CssBaseline, ThemeProvider} from '@mui/material';
+import {createTheme, ThemeProvider} from '@mui/material';
 
 const theme = createTheme({
     palette: {

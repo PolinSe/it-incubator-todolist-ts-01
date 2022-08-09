@@ -6,7 +6,7 @@ import {Button, ButtonGroup, Checkbox, IconButton, List, ListItem} from '@mui/ma
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 
 
-type TaskType = {
+export type TaskType = {
     id: string
     title: string
     isDone: boolean
