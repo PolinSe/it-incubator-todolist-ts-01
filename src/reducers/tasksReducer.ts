@@ -1,15 +1,16 @@
-import {TaskType} from '../Todolist';
 import {v1} from 'uuid';
+import {addTodolistACType, removeTodolistACType} from './todolistsReducer'
+import {TasksType} from '../App';
 
 type ActionsType = removeTaskACType
     | addTaskACType
     | editTaskACType
     | changeStatusACType
-    | addEmptyTaskArrayACType
+    | addTodolistACType
+    | removeTodolistACType
 
-type StateType = { [key: string]: Array<TaskType> }
 
-export const tasksReducer = (state: StateType, action: ActionsType) => {
+export const tasksReducer = (state: TasksType, action: ActionsType) => {
     switch (action.type) {
 
         case 'REMOVE-TASK': {
@@ -42,10 +43,16 @@ export const tasksReducer = (state: StateType, action: ActionsType) => {
                 } : el)
             }
         }
-        case 'ADD-EMPTY-TASKS-ARRAY': {
+
+        case 'ADD-TODOLIST': {
             return {
-                ...state, [action.payload.newTodolistId]: []
+                ...state, [action.payload.todolistId]: []
             }
+        }
+        case 'REMOVE-TODOLIST': {
+            let copyState = {...state}
+            delete copyState[action.payload.todolistId]
+            return copyState
         }
 
         default:
@@ -97,16 +104,6 @@ export const changeStatusAC = (todolistId: string, taskId: string, isDone: boole
             todolistId: todolistId,
             taskId: taskId,
             isDone: isDone
-        }
-    } as const
-}
-
-type addEmptyTaskArrayACType = ReturnType<typeof addEmptyTaskArrayAC>
-export const addEmptyTaskArrayAC = (newTodolistId: string) => {
-    return {
-        type: 'ADD-EMPTY-TASKS-ARRAY',
-        payload: {
-            newTodolistId: newTodolistId,
         }
     } as const
 }

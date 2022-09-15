@@ -1,6 +1,6 @@
 import React, {useReducer} from 'react';
 import './App.css';
-import {Todolist} from './Todolist';
+import {TaskType, Todolist} from './Todolist';
 import {v1} from 'uuid';
 import {AddItemForm} from './components/AddItemForm';
 
@@ -17,8 +17,7 @@ import {
     tasksReducer,
     addTaskAC,
     editTaskAC,
-    changeStatusAC,
-    addEmptyTaskArrayAC
+    changeStatusAC
 } from './reducers/tasksReducer';
 import {
     addTodolistAC,
@@ -30,6 +29,7 @@ import {
 
 export type FilterValuesType = "all" | "active" | "completed";
 export type TodolistsType = { id: string, title: string, filter: FilterValuesType }
+export type TasksType = { [key: string]: Array<TaskType> }
 
 function App() {
 
@@ -66,7 +66,7 @@ function App() {
 
     const removeTodolist = (todolistId: string) => {
         todolistsDespatch(removeTodolistAC(todolistId))
-        delete tasks[todolistId]
+        tasksDespatch(removeTodolistAC(todolistId))
     }
 
     function changeFilter(todolistId: string, value: FilterValuesType) {
@@ -74,9 +74,8 @@ function App() {
     }
 
     const addTodolist = (newTitle: string) => {
-        let newTodolistId = v1()
-        todolistsDespatch(addTodolistAC(newTodolistId, newTitle))
-        tasksDespatch(addEmptyTaskArrayAC(newTodolistId))
+        todolistsDespatch(addTodolistAC(newTitle))
+        tasksDespatch(addTodolistAC(newTitle))
     }
 
 // for tasksReducer:
