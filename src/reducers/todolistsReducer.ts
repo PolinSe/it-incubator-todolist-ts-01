@@ -6,7 +6,9 @@ type ActionsType = changeTodolistTitleACType
     | addTodolistACType
     | changeFilterACType
 
-export const todolistsReducer = (state: Array<TodolistsType>, action: ActionsType) => {
+const initialState: Array<TodolistsType> = []
+
+export const todolistsReducer = (state: Array<TodolistsType> = initialState, action: ActionsType) => {
     switch (action.type) {
         case 'CHANGE-TODOLIST-TITLE': {
             return state.map(el => el.id === action.payload.todolistId ? {...el, title: action.payload.title} : el)
