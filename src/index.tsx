@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {createTheme, ThemeProvider} from '@mui/material';
+import AppWithReducers from './AppWithReducers';
 
 const theme = createTheme({
     palette: {
@@ -24,7 +25,7 @@ const theme = createTheme({
 ReactDOM.render(
     <ThemeProvider theme={theme}>
 
-        <App/>
+        <AppWithReducers/>
     </ThemeProvider>
     , document.getElementById('root'));
 
