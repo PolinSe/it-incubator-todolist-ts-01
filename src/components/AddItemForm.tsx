@@ -1,4 +1,4 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import React, {ChangeEvent, KeyboardEvent, memo, useState} from 'react';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import {IconButton, TextField} from '@mui/material';
 
@@ -7,8 +7,9 @@ type PropsType = {
     callBack: (title: string) => void
 }
 
-export const AddItemForm = (props: PropsType) => {
+export const AddItemForm = memo((props: PropsType) => {
 
+    console.log('AddItemForm')
     const {callBack} = props
 
     let [title, setTitle] = useState("")
@@ -28,7 +29,7 @@ export const AddItemForm = (props: PropsType) => {
         }
     }
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        setError(null);
+        if (error) setError(null);
         if (e.charCode === 13) {
             addTask();
         }
@@ -54,4 +55,4 @@ export const AddItemForm = (props: PropsType) => {
             </IconButton>
         </div>
     );
-};
+});

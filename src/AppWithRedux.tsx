@@ -1,4 +1,4 @@
-import React, {useReducer} from 'react';
+import React, {memo, useCallback, useReducer} from 'react';
 import './App.css';
 import {TaskType, Todolist} from './Todolist';
 import {v1} from 'uuid';
@@ -41,39 +41,39 @@ function AppWithRedux() {
 
     // for todolists:
 
-    const changeTodolistTitle = (todolistId: string, title: string) => {
+    const changeTodolistTitle = useCallback((todolistId: string, title: string) => {
         dispatch(changeTodolistTitleAC(todolistId, title))
-    }
+    }, [dispatch])
 
-    const removeTodolist = (todolistId: string) => {
+    const removeTodolist = useCallback((todolistId: string) => {
         dispatch(removeTodolistAC(todolistId))
-    }
+    }, [dispatch])
 
-    function changeFilter(todolistId: string, value: FilterValuesType) {
+    const changeFilter = useCallback((todolistId: string, value: FilterValuesType) => {
         dispatch(changeFilterAC(todolistId, value))
-    }
+    }, [dispatch])
 
-    const addTodolist = (newTitle: string) => {
+    const addTodolist = useCallback((newTitle: string) => {
         dispatch(addTodolistAC(newTitle))
-    }
+    }, [dispatch])
 
 // for tasks:
 
-    function removeTask(todolistId: string, taskId: string) {
+    const removeTask = useCallback((todolistId: string, taskId: string) => {
         dispatch(removeTaskAC(todolistId, taskId))
-    }
+    }, [dispatch])
 
-    function addTask(todolistId: string, title: string) {
+    const addTask = useCallback((todolistId: string, title: string) => {
         dispatch(addTaskAC(todolistId, title))
-    }
+    }, [dispatch]);
 
-    const editTask = (todolistId: string, taskId: string, newTitle: string) => {
+    const editTask = useCallback((todolistId: string, taskId: string, newTitle: string) => {
         dispatch(editTaskAC(todolistId, taskId, newTitle))
-    }
+    }, [dispatch])
 
-    function changeStatus(todolistId: string, taskId: string, isDone: boolean) {
+    const changeStatus = useCallback((todolistId: string, taskId: string, isDone: boolean) => {
         dispatch(changeStatusAC(todolistId, taskId, isDone));
-    }
+    }, [dispatch])
 
 
     return (
@@ -111,12 +111,6 @@ function AppWithRedux() {
                     {todolists.map(el => {
                         let tasksForTodolist = tasks[el.id];
 
-                        if (el.filter === "active") {
-                            tasksForTodolist = tasks[el.id].filter(t => t.isDone === false);
-                        }
-                        if (el.filter === "completed") {
-                            tasksForTodolist = tasks[el.id].filter(t => t.isDone === true);
-                        }
                         return (
                             <Grid item key={el.id}>
                                 <Paper elevation={3} style={{padding: '20px'}}>
