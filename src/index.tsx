@@ -8,7 +8,7 @@ import AppWithRedux from './AppWithRedux';
 import {store} from './state/store';
 import {Provider} from 'react-redux';
 
-const theme = createTheme({
+export const theme = createTheme({
     palette: {
         primary: {
             main: '#64832C',
