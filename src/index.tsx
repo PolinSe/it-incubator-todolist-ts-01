@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {createRoot} from 'react-dom/client';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
@@ -23,14 +23,25 @@ export const theme = createTheme({
     },
 })
 
+// React 17
+// ReactDOM.render(
+//     <Provider store={store}>
+//         <ThemeProvider theme={theme}>
+//             <App/>
+//         </ThemeProvider>
+//     </Provider>
+//     , document.getElementById('root'));
 
-ReactDOM.render(
+
+// React 18
+const container = document.getElementById('root') as HTMLElement;
+const root = createRoot(container);
+root.render(
     <Provider store={store}>
         <ThemeProvider theme={theme}>
             <AppWithRedux/>
         </ThemeProvider>
-    </Provider>
-    , document.getElementById('root'));
+    </Provider>);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
